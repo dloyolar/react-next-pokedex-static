@@ -29,7 +29,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 const PokemonPage: NextPage<Props> = ({ pokemon }) => {
   return (
-    <Layout title="Some Pokemon">
+    <Layout title={`Pokemon - ${pokemon.name}`}>
       <Grid.Container css={{ marginTop: '5px' }} gap={2}>
         <Grid xs={12} sm={4}>
           <Card hoverable css={{ padding: '30px' }}>
