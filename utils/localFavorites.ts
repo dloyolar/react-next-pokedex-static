@@ -8,7 +8,20 @@ const toggleFavorite = (id: number) => {
   } else {
     favorites.push(id);
   }
+
   localStorage.setItem('favorites', JSON.stringify(favorites));
 };
 
-export default toggleFavorite;
+const existInFavorite = (id: number): boolean => {
+  if (typeof window === 'undefined') return false;
+
+  const favorites: number[] = JSON.parse(
+    localStorage.getItem('favorites') || '[]'
+  );
+
+  return favorites.includes(id);
+};
+
+const handleFavorites = { toggleFavorite, existInFavorite };
+
+export default handleFavorites;
