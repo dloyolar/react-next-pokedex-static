@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { GetStaticProps, GetStaticPaths, NextPage } from 'next';
 import { Button, Card, Container, Grid, Image, Text } from '@nextui-org/react';
 import confetti from 'canvas-confetti';
+import { NextPage, GetStaticPaths, GetStaticProps } from 'next';
+import { useState } from 'react';
+import { pokeApi } from '../../api';
 import { Layout } from '../../components/layouts';
-import { Pokemon } from '../../interfaces';
+import { Pokemon, PokemonListResponse } from '../../interfaces';
 import { getPokemonInfo, localFavorites } from '../../utils';
 
 interface Props {
@@ -11,24 +12,28 @@ interface Props {
 }
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
-  const pokemons151 = [...Array(151)].map((value, i) => `${i + 1}`);
+  const { data } = await pokeApi.get<PokemonListResponse>(`pokemon?limit=151`);
+  const pokemonNames: string[] = data.results.map((pokemon) => pokemon.name);
+
   return {
-    paths: pokemons151.map((id) => ({ params: { id } })),
+    paths: pokemonNames.map((name) => ({
+      params: { name },
+    })),
     fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { id } = params as { id: string };
+  const { name } = params as { name: string };
 
   return {
     props: {
-      pokemon: await getPokemonInfo(id),
+      pokemon: await getPokemonInfo(name),
     },
   };
 };
 
-const PokemonPage: NextPage<Props> = ({ pokemon }) => {
+const PokemonNamePage: NextPage<Props> = ({ pokemon }) => {
   const [isInFavorites, setIsInFavorites] = useState(
     localFavorites.existInFavorite(pokemon.id)
   );
@@ -46,7 +51,6 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
       origin: { x: 1, y: 0 },
     });
   };
-
   return (
     <Layout title={`Pokemon - ${pokemon.name}`}>
       <Grid.Container css={{ marginTop: '5px' }} gap={2}>
@@ -117,4 +121,4 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
   );
 };
 
-export default PokemonPage;
+export default PokemonNamePage;
