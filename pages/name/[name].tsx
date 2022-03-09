@@ -2,6 +2,7 @@ import { Button, Card, Container, Grid, Image, Text } from '@nextui-org/react';
 import confetti from 'canvas-confetti';
 import { NextPage, GetStaticPaths, GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
+import { Heart } from 'react-iconly';
 import { pokeApi } from '../../api';
 import { Layout } from '../../components/layouts';
 import { Pokemon, PokemonListResponse } from '../../interfaces';
@@ -80,12 +81,16 @@ const PokemonNamePage: NextPage<Props> = ({ pokemon }) => {
                 {pokemon.name}
               </Text>
               <Button
-                color="gradient"
-                ghost={!isInFavorites}
+                auto
+                color="error"
                 onClick={onToggleFavorite}
-              >
-                {!isInFavorites ? 'Save in favorites' : 'Remove from favorites'}
-              </Button>
+                icon={
+                  <Heart
+                    set="bold"
+                    primaryColor={!isInFavorites ? 'black' : 'white'}
+                  />
+                }
+              />
             </Card.Header>
             <Card.Body>
               <Text size={30}>Sprites:</Text>

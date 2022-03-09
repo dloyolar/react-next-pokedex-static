@@ -5,6 +5,7 @@ import confetti from 'canvas-confetti';
 import { Layout } from '../../components/layouts';
 import { Pokemon } from '../../interfaces';
 import { getPokemonInfo, localFavorites } from '../../utils';
+import { Heart } from 'react-iconly';
 
 interface Props {
   pokemon: Pokemon;
@@ -76,12 +77,16 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
                 {pokemon.name}
               </Text>
               <Button
-                color="gradient"
-                ghost={!isInFavorites}
+                auto
+                color="error"
                 onClick={onToggleFavorite}
-              >
-                {!isInFavorites ? 'Save in favorites' : 'Remove from favorites'}
-              </Button>
+                icon={
+                  <Heart
+                    set="bold"
+                    primaryColor={!isInFavorites ? 'black' : 'white'}
+                  />
+                }
+              />
             </Card.Header>
             <Card.Body>
               <Text size={30}>Sprites:</Text>
