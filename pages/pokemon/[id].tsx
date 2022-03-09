@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GetStaticProps, GetStaticPaths, NextPage } from 'next';
 import { Button, Card, Container, Grid, Image, Text } from '@nextui-org/react';
 import confetti from 'canvas-confetti';
@@ -29,9 +29,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 };
 
 const PokemonPage: NextPage<Props> = ({ pokemon }) => {
-  const [isInFavorites, setIsInFavorites] = useState(
-    localFavorites.existInFavorite(pokemon.id)
-  );
+  const [isInFavorites, setIsInFavorites] = useState(false);
+
+  useEffect(() => {
+    setIsInFavorites(localFavorites.existInFavorite(pokemon.id));
+  }, [pokemon.id]);
 
   const onToggleFavorite = () => {
     localFavorites.toggleFavorite(pokemon.id);
